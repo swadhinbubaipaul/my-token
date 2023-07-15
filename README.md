@@ -1,4 +1,4 @@
-# MyToken Contract
+# MyCustomToken Contract
 
 ## MyToken Contract
 
