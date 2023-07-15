@@ -24,11 +24,11 @@ The `MyToken` contract is an ERC20 token contract that allows users to buy and s
 - `convertFees(address treasuryAddress) external onlyOwner`: Converts the accumulated fees to ETH and transfers them to a treasury address.
 - `checkContractEthBalance() external view returns (uint256)`: Returns the current ETH balance of the contract.
 
-## AdvancedDEXToken Contract
+## AdvancedMyToken Contract
 
 ### Overview
 
-The `AdvancedDEXToken` contract is an ERC20 token contract that implements an advanced decentralized exchange (DEX) mechanism. It allows users to trade tokens and charges a 5% fee on each transaction. The fee is distributed to the contract itself, which then converts the accumulated fees to ETH and transfers them to a designated fee receiver address.
+The `AdvancedMyToken` contract is an ERC20 token contract that implements an advanced decentralized exchange (DEX) mechanism. It allows users to trade tokens and charges a 5% fee on each transaction. The fee is distributed to the contract itself, which then converts the accumulated fees to ETH and transfers them to a designated fee receiver address.
 
 ### Contract Details
 
@@ -61,7 +61,7 @@ To use the `MyToken` contract, follow these steps:
 6. Call the `convertFees` function to convert the accumulated fees to ETH and transfer them to a treasury address.
 7. Use the `checkContractEthBalance` function to check the current ETH balance of the contract.
 
-To use the `AdvancedDEXToken` contract, follow these steps:
+To use the `AdvancedMyToken` contract, follow these steps:
 
 1. Deploy the contract by providing the required constructor parameters: fee receiver address and Uniswap V2 router address.
 2. Call the `enableTrading` function to enable trading of the token.
