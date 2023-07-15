@@ -72,7 +72,9 @@ To use the `AdvancedMyToken` contract, follow these steps:
 ## Contract deployed to Goerli testnet:
 
 MyToken Contract address: 0x83bde7b180078286c41168dc2a03BB3E76c1892e
+
 Link: https://goerli.etherscan.io/address/0x83bde7b180078286c41168dc2a03BB3E76c1892e
 
 AdvancedMyToken Contract address: 0x9FDf442152003E1A7fD001596c07c3a87DDF56E6
+
 Link: https://goerli.etherscan.io/address/0x9FDf442152003E1A7fD001596c07c3a87DDF56E6
