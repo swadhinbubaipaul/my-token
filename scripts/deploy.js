@@ -16,8 +16,16 @@ async function main() {
   ]);
 
   await myToken.waitForDeployment();
-
   console.log(`MyToken contract deployed to ${myToken.target}`);
+
+  const advancedMyToken = await hre.ethers.deployContract("AdvancedMyToken", [
+    "0xc5E5Be3602995A7F0BD737E0931D776a0Bcc336F",
+    "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+  ]);
+
+  await advancedMyToken.waitForDeployment();
+
+  console.log(`AdvancedMyToken contract deployed to ${advancedMyToken.target}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

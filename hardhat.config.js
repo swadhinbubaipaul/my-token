@@ -5,14 +5,14 @@ require("dotenv").config();
 module.exports = {
   solidity: "0.8.19",
   networks: {
-    polygon_mumbai: {
-      url: process.env.POLYGON_TESTNET_URL,
+    goerli: {
+      url: process.env.GOERLI_TESTNET_URL,
       accounts: [process.env.PRIVATE_KEY],
       saveDeployments: true,
-      chainId: 80001,
+      chainId: 5,
     },
   },
   etherscan: {
-    apiKey: process.env.POLYGONSCAN_APIKEY,
+    apiKey: process.env.ETHERSCAN_APIKEY,
   },
 };

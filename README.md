@@ -1,54 +1,78 @@
 # MyToken Contract
 
-## Overview
+## MyToken Contract
 
-The `MyToken` contract is an ERC20 token contract that allows users to buy and sell tokens. It includes functionality for setting a fee wallet and fee percentage, converting fees to ETH, and checking the contract's ETH balance.
+### Overview
 
-## Contract Details
+The `MyToken` contract is an ERC20 token contract that allows users to buy and sell tokens. It implements a fee mechanism where a percentage of each transaction is deducted as a fee and transferred to a designated fee wallet. The contract also provides functions to set the fee wallet address and fee percentage, as well as convert the accumulated fees to ETH and transfer them to a treasury address.
+
+### Contract Details
 
 - SPDX-License-Identifier: MIT
 - Solidity Version: ^0.8.0
 - Imports:
-  - `ERC20` from "@openzeppelin/contracts/token/ERC20/ERC20.sol"
-  - `Ownable` from "@openzeppelin/contracts/access/Ownable.sol"
+  - `@openzeppelin/contracts/token/ERC20/ERC20.sol`
+  - `@openzeppelin/contracts/access/Ownable.sol`
 
-## Contract Structure
+### Contract Functions
 
-The `MyToken` contract inherits from `ERC20` and `Ownable`, making it an ERC20 token contract with additional ownership functionality.
+- `constructor(string memory _name, string memory _symbol, uint256 _totalSupply, address _feeWallet, uint256 _feePercentage)`: Initializes the token contract with the specified parameters.
+- `buyTokens() external payable`: Allows users to buy tokens by sending ETH to the contract.
+- `sellTokens(uint256 amount) external`: Allows users to sell a specified amount of tokens.
+- `setFeeWallet(address _feeWallet) external onlyOwner`: Sets the fee wallet address.
+- `setFeePercentage(uint256 _feePercentage) external onlyOwner`: Sets the fee percentage.
+- `convertFees(address treasuryAddress) external onlyOwner`: Converts the accumulated fees to ETH and transfers them to a treasury address.
+- `checkContractEthBalance() external view returns (uint256)`: Returns the current ETH balance of the contract.
 
-### State Variables
+## AdvancedDEXToken Contract
 
-- `feeWallet`: The address of the wallet where fees are transferred to.
-- `feePercentage`: The percentage of fees charged on token transfers.
+### Overview
 
-### Events
+The `AdvancedDEXToken` contract is an ERC20 token contract that implements an advanced decentralized exchange (DEX) mechanism. It allows users to trade tokens and charges a 5% fee on each transaction. The fee is distributed to the contract itself, which then converts the accumulated fees to ETH and transfers them to a designated fee receiver address.
 
-- `FeeConverted(address indexed wallet, uint256 amount)`: Triggered when fees are converted to ETH.
+### Contract Details
 
-### Constructor
+- SPDX-License-Identifier: MIT
+- Solidity Version: ^0.8.9
+- Imports:
+  - `@openzeppelin/contracts/utils/Address.sol`
+  - `@openzeppelin/contracts/token/ERC20/ERC20.sol`
+  - `@openzeppelin/contracts/security/ReentrancyGuard.sol`
+  - `@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol`
+  - `@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol`
 
-The constructor initializes the token with the specified name, symbol, total supply, fee wallet address, and fee percentage. It also mints the total supply of tokens to the contract deployer.
+### Contract Functions
 
-### Functions
-
-- `buyTokens()`: Allows users to buy tokens by sending ETH to the contract.
-- `sellTokens(uint256 amount)`: Allows users to sell tokens and receive ETH in return.
-- `setFeeWallet(address _feeWallet)`: Sets the fee wallet address.
-- `setFeePercentage(uint256 _feePercentage)`: Sets the fee percentage.
-- `convertFees(address treasuryAddress)`: Converts fees to ETH and transfers them to the specified treasury address.
-- `checkContractEthBalance()`: Returns the current ETH balance of the contract.
+- `constructor(address feeReceiver_, address router_)`: Initializes the token contract with the specified fee receiver address and Uniswap V2 router address.
+- `enableTrading() external`: Allows the contract owner to enable trading of the token.
+- `_transfer(address sender_, address recipient_, uint256 amount_) internal virtual override`: Handles the transfer of tokens between addresses.
+- `_distributeFee() internal nonReentrant`: Distributes the accumulated fees by swapping tokens for ETH and transferring them to the fee receiver address.
+- `_swapTokensForETH(uint256 amount_) internal`: Swaps the specified amount of tokens for ETH using the Uniswap V2 router.
 
 ## Usage
 
-1. Deploy the `MyToken` contract, providing the required constructor parameters.
-2. Set the fee wallet address and fee percentage using the `setFeeWallet` and `setFeePercentage` functions, respectively.
-3. Users can buy tokens by calling the `buyTokens` function and sending ETH to the contract.
-4. Users can sell tokens by calling the `sellTokens` function and specifying the amount of tokens to sell.
-5. The contract owner can convert fees to ETH by calling the `convertFees` function and specifying the treasury address.
-6. The contract owner can check the current ETH balance of the contract by calling the `checkContractEthBalance` function.
+To use the `MyToken` contract, follow these steps:
 
-## Contract deployed to mumbai testnet:
+1. Deploy the contract by providing the required constructor parameters: name, symbol, total supply, fee wallet address, and fee percentage.
+2. Call the `buyTokens` function and send ETH to the contract to purchase tokens.
+3. Call the `sellTokens` function to sell a specified amount of tokens and receive ETH in return.
+4. Use the `setFeeWallet` function to set the fee wallet address.
+5. Use the `setFeePercentage` function to set the fee percentage.
+6. Call the `convertFees` function to convert the accumulated fees to ETH and transfer them to a treasury address.
+7. Use the `checkContractEthBalance` function to check the current ETH balance of the contract.
 
-Contract address: 0xDCD3B39F7e6E56f3205b7609E672Ae0Eb2c19cb2
+To use the `AdvancedDEXToken` contract, follow these steps:
 
-Link: https://mumbai.polygonscan.com/address/0xDCD3B39F7e6E56f3205b7609E672Ae0Eb2c19cb2
+1. Deploy the contract by providing the required constructor parameters: fee receiver address and Uniswap V2 router address.
+2. Call the `enableTrading` function to enable trading of the token.
+3. Transfer tokens between addresses using the regular ERC20 transfer functions.
+4. The contract will automatically deduct a 5% fee on each transaction and distribute the accumulated fees.
+5. The contract will convert the accumulated fees to ETH using the Uniswap V2 router and transfer them to the fee receiver address.
+
+## Contract deployed to Goerli testnet:
+
+MyToken Contract address: 0x83bde7b180078286c41168dc2a03BB3E76c1892e
+Link: https://goerli.etherscan.io/address/0x83bde7b180078286c41168dc2a03BB3E76c1892e
+
+AdvancedMyToken Contract address: 0x9FDf442152003E1A7fD001596c07c3a87DDF56E6
+Link: https://goerli.etherscan.io/address/0x9FDf442152003E1A7fD001596c07c3a87DDF56E6
