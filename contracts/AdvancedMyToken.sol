@@ -3,35 +3,29 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 
-contract AdvancedMyToken is ERC20, ReentrancyGuard {
+contract AdvancedMyToken is ERC20, Ownable {
     using Address for address payable;
 
     address private immutable _feeReceiver;
     IUniswapV2Router02 private immutable _router;
     address private immutable _weth9;
-    address private immutable _pair;
-    bool private _trading = false;
+    bool public _tradingStatus = false;
 
     constructor(
         address feeReceiver_,
         address router_
-    ) ERC20("AdvancedDEXToken", "ADT") {
+    ) ERC20("AdvancedMyToken", "AMT") {
         _mint(msg.sender, 10000000000000000000 * 10 ** decimals());
         _feeReceiver = feeReceiver_;
         _router = IUniswapV2Router02(router_);
         _weth9 = _router.WETH();
-        _pair = IUniswapV2Factory(_router.factory()).createPair(
-            address(this),
-            _weth9
-        );
     }
 
-    function enableTrading() external {
-        _trading = true;
+    function enableDisableTrading() external onlyOwner {
+        _tradingStatus = !_tradingStatus;
     }
 
     function _transfer(
@@ -39,7 +33,7 @@ contract AdvancedMyToken is ERC20, ReentrancyGuard {
         address recipient_,
         uint256 amount_
     ) internal virtual override {
-        if (sender_ == address(this) || !_trading) {
+        if (sender_ == address(this) || !_tradingStatus) {
             super._transfer(sender_, recipient_, amount_);
         } else {
             uint fee = (amount_ / 100) * 5; // 5% fee
@@ -47,19 +41,14 @@ contract AdvancedMyToken is ERC20, ReentrancyGuard {
 
             super._transfer(sender_, address(this), fee);
 
-            if (sender_ != _pair) {
-                _distributeFee();
-            }
-
             super._transfer(sender_, recipient_, amt);
         }
     }
 
-    function _distributeFee() internal nonReentrant {
+    function _distributeFee() external {
         uint amount = balanceOf(address(this));
-        if (amount >= 0) {
-            _swapTokensForETH(amount);
-        }
+        require(amount > 0, "Nothing to distribute");
+        _swapTokensForETH(amount);
     }
 
     function _swapTokensForETH(uint256 amount_) internal {

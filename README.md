@@ -1,4 +1,4 @@
-# MyCustomToken Contract
+# MyToken Contract
 
 ## MyToken Contract
 
@@ -28,7 +28,7 @@ The `MyToken` contract is an ERC20 token contract that allows users to buy and s
 
 ### Overview
 
-The `AdvancedMyToken` contract is an ERC20 token contract that implements an advanced decentralized exchange (DEX) mechanism. It allows users to trade tokens and charges a 5% fee on each transaction. The fee is distributed to the contract itself, which then converts the accumulated fees to ETH and transfers them to a designated fee receiver address.
+The `AdvancedMyToken` contract is an ERC20 token contract that implements an advanced decentralized exchange (DEX) mechanism. It allows users to trade tokens and charges a 5% fee on each transaction. The fee is distributed to the contract itself, and owner converts the accumulated fees to ETH and transfers them to a designated fee receiver address.
 
 ### Contract Details
 
@@ -37,14 +37,13 @@ The `AdvancedMyToken` contract is an ERC20 token contract that implements an adv
 - Imports:
   - `@openzeppelin/contracts/utils/Address.sol`
   - `@openzeppelin/contracts/token/ERC20/ERC20.sol`
-  - `@openzeppelin/contracts/security/ReentrancyGuard.sol`
-  - `@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol`
+  - `@openzeppelin/contracts/access/Ownable.sol`
   - `@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol`
 
 ### Contract Functions
 
 - `constructor(address feeReceiver_, address router_)`: Initializes the token contract with the specified fee receiver address and Uniswap V2 router address.
-- `enableTrading() external`: Allows the contract owner to enable trading of the token.
+- `enableDisableTrading() external onlyOwner`: Allows the contract owner to enable/disable trading of the token.
 - `_transfer(address sender_, address recipient_, uint256 amount_) internal virtual override`: Handles the transfer of tokens between addresses.
 - `_distributeFee() internal nonReentrant`: Distributes the accumulated fees by swapping tokens for ETH and transferring them to the fee receiver address.
 - `_swapTokensForETH(uint256 amount_) internal`: Swaps the specified amount of tokens for ETH using the Uniswap V2 router.
@@ -67,14 +66,14 @@ To use the `AdvancedMyToken` contract, follow these steps:
 2. Call the `enableTrading` function to enable trading of the token.
 3. Transfer tokens between addresses using the regular ERC20 transfer functions.
 4. The contract will automatically deduct a 5% fee on each transaction and distribute the accumulated fees.
-5. The contract will convert the accumulated fees to ETH using the Uniswap V2 router and transfer them to the fee receiver address.
+5. Convert the accumulated fees to ETH using the Uniswap V2 router and transfer them to the fee receiver address.
 
 ## Contract deployed to Goerli testnet:
 
-MyToken Contract address: 0x83bde7b180078286c41168dc2a03BB3E76c1892e
+MyToken Contract address: 0x8A42AF05734B79C6493eA0B0243A0De5E8F0Ab95
 
-Link: https://goerli.etherscan.io/address/0x83bde7b180078286c41168dc2a03BB3E76c1892e
+Link: https://goerli.etherscan.io/address/0x8A42AF05734B79C6493eA0B0243A0De5E8F0Ab95
 
-AdvancedMyToken Contract address: 0x9FDf442152003E1A7fD001596c07c3a87DDF56E6
+AdvancedMyToken Contract address: 0xD3411184789A71207148DFd265d7C9FDaB770808
 
-Link: https://goerli.etherscan.io/address/0x9FDf442152003E1A7fD001596c07c3a87DDF56E6
+Link: https://goerli.etherscan.io/address/0xD3411184789A71207148DFd265d7C9FDaB770808
